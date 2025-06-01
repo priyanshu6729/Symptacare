@@ -187,7 +187,6 @@ export function SymptomForm({ onSubmit, userData }: SymptomFormProps) {
                 focusedField === "symptoms" ? "ring-2 ring-primary/20" : ""
               }`}
               onFocus={() => setFocusedField("symptoms")}
-              onBlur={() => setFocusedField(null)}
               {...register("symptoms")}
             />
 
@@ -248,7 +247,6 @@ export function SymptomForm({ onSubmit, userData }: SymptomFormProps) {
                   focusedField === "age" ? "ring-2 ring-primary/20" : ""
                 } ${userData?.age ? "bg-muted/50" : ""}`}
                 onFocus={() => setFocusedField("age")}
-                onBlur={() => setFocusedField(null)}
                 disabled={!!userData?.age}
                 {...register("age")}
               />
@@ -377,7 +375,6 @@ export function SymptomForm({ onSubmit, userData }: SymptomFormProps) {
                   focusedField === "duration" ? "ring-2 ring-primary/20" : ""
                 }`}
                 onFocus={() => setFocusedField("duration")}
-                onBlur={() => setFocusedField(null)}
                 {...register("duration")}
               />
 
