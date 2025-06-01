@@ -2,14 +2,15 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import { Navigate, useLocation } from "react-router-dom";
 
 export interface UserProfile {
-  email: string;
   name: string;
+  email: string;
   height?: string;
   weight?: string;
   age?: number;
   gender?: string;
   medicalConditions?: string[];
   allergies?: string[];
+  role?: string; // Add this line
 }
 
 interface AuthContextType {
@@ -98,4 +99,4 @@ export function AuthGuard({ children }: { children: ReactNode }) {
   }
 
   return <>{children}</>;
-} 
+}

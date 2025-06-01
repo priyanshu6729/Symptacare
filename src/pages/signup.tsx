@@ -4,7 +4,13 @@ import { useAuth } from "../lib/auth-context";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
-import { Select } from "../components/ui/select";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
 
 export function SignupPage() {
@@ -34,6 +40,7 @@ export function SignupPage() {
     gender: "",
     medicalConditions: "",
     allergies: "",
+    role: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -67,6 +74,7 @@ export function SignupPage() {
       gender: formData.gender,
       medicalConditions: formData.medicalConditions ? formData.medicalConditions.split(',').map(c => c.trim()) : [],
       allergies: formData.allergies ? formData.allergies.split(',').map(a => a.trim()) : [],
+      role: formData.role,
     });
 
     // The redirect will happen in the useEffect
@@ -200,20 +208,22 @@ export function SignupPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="gender" className="block text-sm font-medium">
+                    <label className="block text-sm font-medium">
                       Gender
                     </label>
                     <Select
-                      id="gender"
-                      name="gender"
                       value={formData.gender}
-                      onChange={handleChange}
+                      onValueChange={(value) => setFormData(prev => ({ ...prev, gender: value }))}
                     >
-                      <option value="">Select gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                      <option value="prefer-not-to-say">Prefer not to say</option>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                        <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                      </SelectContent>
                     </Select>
                   </div>
                 </div>
@@ -243,6 +253,23 @@ export function SignupPage() {
                     onChange={handleChange}
                   />
                 </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Role</label>
+                  <Select
+                    value={formData.role}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, role: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="patient">Patient</SelectItem>
+                      <SelectItem value="healthcare_provider">Healthcare Provider</SelectItem>
+                      <SelectItem value="researcher">Researcher</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
@@ -265,4 +292,4 @@ export function SignupPage() {
       </Card>
     </div>
   );
-} 
+}
