@@ -99,11 +99,11 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 text-primary" />
-                <span>+1 (555) 123-4567</span>
+                <span>+91 885827****</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 text-primary" />
-                <span>San Francisco, CA</span>
+                <span>Jankipuram, Lucknow</span>
               </div>
             </div>
 
@@ -130,11 +130,6 @@ export function Footer() {
             <p className="text-center text-xs text-muted-foreground">
               &copy; {currentYear} SymptaCare. All rights reserved.
             </p>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>Made with</span>
-              <Heart className="h-3 w-3 text-red-500 fill-current animate-pulse" />
-              <span>for better health</span>
-            </div>
           </div>
         </div>
       </div>
