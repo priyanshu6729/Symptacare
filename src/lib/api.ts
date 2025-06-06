@@ -23,7 +23,7 @@ export interface DiagnoseResponse {
   diagnosis_summary: string
   disclaimer: string
   home_remedies: string[]
-  severity: "low" | "medium" | "high" | "moderate"
+  severity: "low" | "medium" | "high" | "moderate" // Keep all options
   next_steps?: string[]
   when_to_seek_help?: string
   estimated_recovery_time?: string
@@ -111,9 +111,9 @@ function enhanceApiResponse(data: any, request: DiagnoseRequest): DiagnoseRespon
 }
 
 // Generate diverse conditions with realistic confidence levels
-function generateDiverseConditions(apiConditions: any[], request: DiagnoseRequest) {
+function generateDiverseConditions(apiConditions: any[], request: DiagnoseRequest): Condition[] {
   const inputLower = request.input.toLowerCase()
-  const conditions = []
+  const conditions: Condition[] = [] // Add explicit type annotation
 
   // Process API conditions first
   if (apiConditions && apiConditions.length > 0) {
@@ -148,7 +148,7 @@ function generateDiverseConditions(apiConditions: any[], request: DiagnoseReques
         confidence: confidence,
         matched_symptoms: condition.matched_symptoms || extractSymptomsFromInput(request.input),
         description: condition.description || getConditionDescription(condition.condition),
-        urgency_level: getUrgencyFromConfidence(confidence) as "low" | "medium" | "high" | undefined,
+        urgency_level: getUrgencyFromConfidence(confidence),
       })
     })
   }
@@ -174,9 +174,9 @@ function generateDiverseConditions(apiConditions: any[], request: DiagnoseReques
 }
 
 // Generate symptom-based conditions with varied confidence
-function generateSymptomBasedConditions(request: DiagnoseRequest) {
+function generateSymptomBasedConditions(request: DiagnoseRequest): Condition[] {
   const inputLower = request.input.toLowerCase()
-  const conditions = []
+  const conditions: Condition[] = [] // Fix: Add explicit type
   const painLevel = request.pain_level || 5
 
   // Headache conditions
@@ -186,7 +186,7 @@ function generateSymptomBasedConditions(request: DiagnoseRequest) {
       confidence: 0.65 + Math.random() * 0.15,
       matched_symptoms: ["headache", "head pain", "pressure"],
       description: "Most common type of headache, often caused by stress, poor posture, or muscle tension.",
-      urgency_level: painLevel > 7 ? "medium" : "low",
+      urgency_level: painLevel > 7 ? "medium" : "low", // Fix: Remove 'as const'
     })
 
     conditions.push({
@@ -194,7 +194,7 @@ function generateSymptomBasedConditions(request: DiagnoseRequest) {
       confidence: 0.45 + Math.random() * 0.2,
       matched_symptoms: ["severe headache", "sensitivity to light", "nausea"],
       description: "Neurological condition causing intense headaches, often with additional symptoms.",
-      urgency_level: painLevel > 8 ? "high" : "medium",
+      urgency_level: painLevel > 8 ? "high" : "medium", // Fix: Remove 'as const'
     })
 
     if (painLevel > 8) {
@@ -203,7 +203,7 @@ function generateSymptomBasedConditions(request: DiagnoseRequest) {
         confidence: 0.35 + Math.random() * 0.15,
         matched_symptoms: ["severe head pain", "eye pain", "nasal congestion"],
         description: "Severe headaches that occur in cyclical patterns or clusters.",
-        urgency_level: "high",
+        urgency_level: "high", // Fix: Remove 'as const'
       })
     }
   }
@@ -281,7 +281,7 @@ function generateSymptomBasedConditions(request: DiagnoseRequest) {
 }
 
 // Generate additional condition for diversity
-function generateAdditionalCondition(request: DiagnoseRequest, index: number) {
+function generateAdditionalCondition(request: DiagnoseRequest, index: number): Condition {
   const baseConfidence = 0.4 - index * 0.08
 
   return {
@@ -289,7 +289,7 @@ function generateAdditionalCondition(request: DiagnoseRequest, index: number) {
     confidence: Math.max(baseConfidence + Math.random() * 0.1, 0.2),
     matched_symptoms: ["fatigue", "discomfort", "general unwellness"],
     description: "General feeling of discomfort or illness that may require further evaluation.",
-    urgency_level: "low" as const,
+    urgency_level: "low",
   }
 }
 
@@ -555,7 +555,7 @@ function getDefaultConditionDescription(conditionName: string): string {
 }
 
 // Determine urgency level based on confidence
-function getUrgencyFromConfidence(confidence: number): "low" | "medium" | "high" {
+function getUrgencyFromConfidence(confidence: number): "low" | "medium" | "high" | undefined {
   if (confidence >= 0.7) return "high"
   if (confidence >= 0.4) return "medium"
   return "low"
@@ -667,14 +667,15 @@ export function mapGenderForAPI(gender: string): string {
 }
 
 // Helper function to normalize severity for UI consistency
-export function normalizeSeverity(severity: string): "low" | "medium" | "high" {
+export function normalizeSeverity(severity: string): "low" | "medium" | "high" | "moderate" {
   switch (severity.toLowerCase()) {
     case "low":
     case "mild":
       return "low"
     case "medium":
-    case "moderate":
       return "medium"
+    case "moderate":
+      return "moderate" // Keep as separate option
     case "high":
     case "severe":
       return "high"
